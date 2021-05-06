@@ -937,9 +937,9 @@ EvolutionGNN<T>::EvolutionGNN(int inputCount, int outputCount, int threadCount) 
 		this->threadCount = 1;
 
 	for (int i = 0; i < inputCount; ++i)
-		this->inputNodes.push_back(GraphNode<T>(i));
+		this->inputNodes.push_back(InputGraphNode<T>(i));
 	for (int i = 0; i < outputCount; ++i)
-		this->inputNodes.push_back(GraphNode<T>(i + inputCount));
+		this->outputNodes.push_back(OutputGraphNode<T>(i + inputCount));
 
 	nodeCount = inputCount + outputCount;
 }
