@@ -1,7 +1,7 @@
 /*
 * Date-format:		DD-MM-YYYY
 * Creation-date:	09-04-2021
-* Last-updated:		06-05-2021
+* Last-updated:		07-05-2021
 *
 * File-name:	T_EvolutionGraphNN.h
 * Version:		0.0.3
@@ -303,7 +303,7 @@ public:
 	T getOutput(int index);
 
 	//Add hidden neuron
-	void addNode(int count = 1);
+	void addNodes(int count = 1);
 
 	//Add connection between nodes
 	// node1 -------> node2
@@ -348,7 +348,7 @@ public:
 
 		////Add extra 5 nodes
 		//for (int i = 0; i < 5; ++i)
-		//	addNode();
+		//	addNodes();
 		////Add connections
 		//addConnection(0, 2, 30.0);
 		//addConnection(2, 3, 30.0);
@@ -362,14 +362,14 @@ public:
 
 		//Random initializations
 		for (int i = 0; i < 1000; ++i)
-			addNode();
+			addNodes();
 		for (int i = 0; i < 10000; ++i)
 			addConnection(rand() % nodeCount, rand() % nodeCount, rand() % 2001 / 1000.0 - 1.0);
 
 
 		//OR gate
 		//for (int i = 0; i < 4; ++i)
-		//	addNode();
+		//	addNodes();
 		////Add connections
 		//addConnection(0, 2);
 		//addConnection(0, 3);
@@ -381,7 +381,7 @@ public:
 
 		////AND gate
 		//for (int i = 0; i < 6; ++i)
-		//	addNode();
+		//	addNodes();
 		////Add connections
 		//addConnection(0, 2);
 		//addConnection(0, 3);
@@ -463,7 +463,7 @@ void EvolutionGNN<T>::inherit(EvolutionGNN<T>& parentA, EvolutionGNN<T>& parentB
 
 	//Create all nodes
 	initialize(inNodeCount, outNodeCount, threadCount);
-	addNode(hiddenNodeCount);
+	addNodes(hiddenNodeCount);
 
 	//Selectively add connections from parents
 	//Note that if we also add buffer related info(values, states) to the child,
@@ -592,7 +592,7 @@ bool EvolutionGNN<T>::load(string path) {
 	initialize(inputNodes, outputNodes);
 
 	//Add all nodes
-	addNode(hiddenNodes);
+	addNodes(hiddenNodes);
 
 	//Run for each connection
 	int inNode, outNode;
@@ -705,7 +705,7 @@ void EvolutionGNN<T>::addConnection(int node1, int node2, T weight, T ABuffer, T
 }
 
 template <class T>
-void EvolutionGNN<T>::addNode(int count) {
+void EvolutionGNN<T>::addNodes(int count) {
 	for (int i = 0; i < count; ++i) {
 		graphNodes.emplace(nodeCount, GraphNode<T>(nodeCount));
 		++nodeCount;

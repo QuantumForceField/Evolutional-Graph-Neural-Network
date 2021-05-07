@@ -24,7 +24,7 @@ int main(){
 	//Testing AND operation
 	EvolutionGNN<float> orGate(2, 1);
 	//Add nodes
-	orGate.addNode(3);
+	orGate.addNodes(3);
 	//Add connections
 	orGate.addConnection(0, 4, 20);
 	orGate.addConnection(1, 5, 20);
@@ -63,7 +63,7 @@ int main(){
 	//Testing OR operation
 	EvolutionGNN<float> andGate(2, 1);
 	//Add nodes
-	andGate.addNode(3);
+	andGate.addNodes(3);
 	//Add connections
 	andGate.addConnection(0, 2, 40);
 	andGate.addConnection(1, 2, 40);
