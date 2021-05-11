@@ -284,9 +284,6 @@ public:
 	//Flip buffer in a multi-threaded way, should be called by flipBuffer()
 	void thread_flipBuffer(int startId, int endId, int dummy = 0);
 
-	//thread based runer
-	//void t_run(int startNodeId, int endNodeId);
-
 	//Run the whole neural network
 	void run();
 
@@ -314,6 +311,9 @@ public:
 	//weight following 
 	void addRandomConnection(int count = 1, unsigned int randomState = rand());
 
+	//Remove a connection given by the index
+	void removeConnection(int index);
+
 	//Remove useless connections that are not connected to any nodes
 	void removeDisconnectedConnections();
 
@@ -333,9 +333,12 @@ public:
 	//inheritMemory: Select weither value and buffer states will be passed
 	void inherit(EvolutionGNN<T>& parentA, EvolutionGNN<T>& parentB, double AConRate = 0.7, double BConRate = 0.3, bool inheritMemory = false);
 
-	//Mutate
-	//Random action
-	//void mutate(double newConRate, double newNodeRate, double ...)
+	//Mutate itself by deleting connections/creating new connections/creating new nodes
+	// newConRate to create new connection
+	// deleteConRate to delete connection
+	// newNodeRate to create new node
+	// repeatRate to mutate again (follows Geometric distributions)
+	void mutate(double newConRate = 0.5, double deleteConRate = 0.5, double newNodeRate = 0.0001, double repeatRate = 0.5);
 
 
 	//Testing function
@@ -419,7 +422,7 @@ public:
 		}
 		cout << "Done!" << endl;
 
-		cout << "Continue simulation after reloading from file" << endl;srand(42);
+		cout << "Continue simulation after reloading from file" << endl; srand(42);
 		removeDisconnectedConnections();
 
 		for (int i = 0; i < 100; ++i) {
@@ -447,8 +450,30 @@ ostream& operator<<(ostream& o, EvolutionGNN<T>& egnn) {
 	return o;
 }
 
+
+
+
 /***********************************************/
 // Function bodies
+
+template <class T>
+void EvolutionGNN<T>::mutate(double newConRate, double deleteConRate, double newNodeRate, double repeatRate) {
+	do {
+		//Create a new connection
+		if (rand() % 10000 / 10000.0 < newConRate)
+			addRandomConnection();
+
+		//Delete a connection
+		if (rand() % 10000 / 10000.0 < deleteConRate)
+			if (con.size() > 0)
+				removeConnection(rand() % con.size());
+
+		//Create a new node
+		if (rand() % 10000 / 10000.0 < newNodeRate)
+			addNodes();
+
+	} while (rand() % 10000 / 10000.0 < repeatRate);	//Mutate once more
+}
 
 template <class T>
 void EvolutionGNN<T>::inherit(EvolutionGNN<T>& parentA, EvolutionGNN<T>& parentB, double AConRate, double BConRate, bool inheritMemory) {
@@ -666,6 +691,11 @@ void EvolutionGNN<T>::removeDisconnectedConnections() {
 		con.erase(con.begin() + indexes[i]);
 		indexes.pop_back();
 	}
+}
+
+template <class T>
+void EvolutionGNN<T>::removeConnection(int index) {
+	con.erase(con.begin() + index);
 }
 
 template <class T>
