@@ -21,6 +21,24 @@ int main(){
 
 	cout << "Running test..." << endl;
 	
+	//Testing NOT operator
+	EvolutionGNN<float> notGate(1, 1);
+	//Add connections
+	notGate.addConnection(0, 1, -20);
+	//Set input
+	notGate.setInput(0, -1);//Test
+	//Test
+	test(notGate, "NOT GATE with input [-1], expected output [ 1]");
+	
+	//Set input
+	notGate.setInput(0, 1);//Test
+	//Test
+	test(notGate, "NOT GATE with input [ 1], expected output [-1]");
+	
+	cout << endl;
+	
+	
+	
 	//Testing AND operation
 	EvolutionGNN<float> orGate(2, 1);
 	//Add nodes
@@ -44,19 +62,21 @@ int main(){
 	orGate.setInput(0, 1);
 	orGate.setInput(1, -1);
 	//Test
-	test(orGate, "OR GATE with input [1, -1], expected output [1]");
+	test(orGate, "OR GATE with input [1,  -1], expected output [ 1]");
 	
 	//Set input
 	orGate.setInput(0, -1);
 	orGate.setInput(1, 1);
 	//Test
-	test(orGate, "OR GATE with input [-1, 1], expected output [1]");
+	test(orGate, "OR GATE with input [-1,  1], expected output [ 1]");
 	
 	//Set input
 	orGate.setInput(0, 1);
 	orGate.setInput(1, 1);
 	//Test
-	test(orGate, "OR GATE with input [1, 1], expected output [1]");
+	test(orGate, "OR GATE with input [1,   1], expected output [ 1]");
+	
+	cout << endl;
 	
 	
 	
@@ -79,19 +99,22 @@ int main(){
 	andGate.setInput(0, 1);
 	andGate.setInput(1, -1);
 	//Test
-	test(andGate, "AND GATE with input [1, -1], expected output [-1]");
+	test(andGate, "AND GATE with input [1,  -1], expected output [-1]");
 	
 	//Set input
 	andGate.setInput(0, -1);
 	andGate.setInput(1, 1);
 	//Test
-	test(andGate, "AND GATE with input [-1, 1], expected output [-1]");
+	test(andGate, "AND GATE with input [-1,  1], expected output [-1]");
 	
 	//Set input
 	andGate.setInput(0, 1);
 	andGate.setInput(1, 1);
 	//Test
-	test(andGate, "AND GATE with input [1, 1], expected output [1]");
+	test(andGate, "AND GATE with input [1,   1], expected output [ 1]");
+	
+	cout << endl;
+	
 	
 	
 	//Testing to save neural network
@@ -113,19 +136,21 @@ int main(){
 	loaded.setInput(0, 1);
 	loaded.setInput(1, -1);
 	//Test
-	test(loaded, "Loaded AND GATE with input [1, -1], expected output [-1]");
+	test(loaded, "Loaded AND GATE with input [1,  -1], expected output [-1]");
 	
 	//Set input
 	loaded.setInput(0, -1);
 	loaded.setInput(1, 1);
 	//Test
-	test(loaded, "Loaded AND GATE with input [-1, 1], expected output [-1]");
+	test(loaded, "Loaded AND GATE with input [-1,  1], expected output [-1]");
 	
 	//Set input
 	loaded.setInput(0, 1);
 	loaded.setInput(1, 1);
 	//Test
-	test(loaded, "Loaded AND GATE with input [1, 1], expected output [1]");
+	test(loaded, "Loaded AND GATE with input [1,   1], expected output [ 1]");
+	
+	cout << endl;
 	
 	
 	return 0;
