@@ -47,14 +47,14 @@ To compile the program using **g++**, we need to include the **-lpthread** optio
 g++ your_cpp_file.cpp -o your_desired_executable_name -lpthread
 ```
 
-The test code of EvolutionGraphNN is include in the [src](./src) folder.
+The test code of EvolutionGraphNN is included in the [src](./src) folder.
 
-To test the test code, follow these steps:
+To compile and run the test code, follow these steps:
 
 1. Open the terminal in the **Evolutional-Graph-Neural-Network** folder.
-1. Navigate to **src** folder in the terminal by typing `cd src/` and hit **Enter**.
+1. Navigate to the **src** folder in the terminal by typing `cd src/` and hit **Enter**.
 1. Compile the executable by typing `make` and hit **Enter** in the terminal.
-1. Run the compiled executable and generate .svg of test models by typing `make test` and hit **Enter** in the terminal.
+1. Run the compiled executable and generate .svg of test models by typing `make run` and hit **Enter** in the terminal.
 
 
 ### Logic Gates
@@ -66,7 +66,9 @@ Since the activation of the neural network is ***tanh***, we can expect that the
 #### **NOT Gate**
 To create a **Not Gate**, we can simply flip the input of a neuron. So the architecture will be like this:
 
-![Architecture for Not Gate](./img/notgate.svg)
+<p align="center"> 
+<img src="./img/notgate.svg" alt="Architecture for Not Gate">
+</p>
 
 To create such neural network, we should define the network to have **1 input node** and **1 output node**:
 
@@ -87,9 +89,11 @@ And that completes the building of **Not Gate** with EvolutionGNN.
 
 
 #### **AND Gate**
-To create a **And Gate**, the architecture is a bit more complicated than **Not Gate**. Which looks like this:
+To create an **And Gate**, the architecture is a bit more complicated than **Not Gate**. Which looks like this:
 
-![Architecture for And Gate](./img/andgate.svg)
+<p align="center"> 
+<img src="./img/andgate.svg" alt="Architecture for And Gate">
+</p>
 
 One thing to note is that **node #3** is not a normal node. It acts as a *bias*, and constantly output 1 so that when it multiple by -60.0 it constantly output -60.0. The reason for this is that we want **Not Gate** only turns on (output 1) when both inputs are **True** (1) but not when only one input is **True**.  
 
@@ -122,9 +126,11 @@ And that completes the building of **And Gate** with EvolutionGNN.
 
 #### **OR Gate**
 
-To create a **Or Gate**, the architecture is a bit more complicate than **And Gate**:
+To create an **Or Gate**, the architecture is a bit more complicate than **And Gate**:
 
-![Architecture for OR Gate](./img/orgate.svg)
+<p align="center"> 
+<img src="./img/orgate.svg" alt="Architecture for Or Gate">
+</p>
 
 Again, **node #3** is not a normal node. It acts as a *bias*, and constantly output 1. 
 
