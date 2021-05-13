@@ -159,5 +159,40 @@ int main(){
 	cout << endl;
 	
 	
+	
+	//Following section demostrate mutation, inheritance and saving as DOT
+	
+	//Generate a random network
+	EvolutionGNN<float> a;
+	//Initialize with 5 inputs and 5 outputs
+	a.initialize(5, 5);
+	//Add 10 hidden nodes
+	a.addNodes(10);
+	//Mutate for 20 times
+	for(int i = 0; i < 20; ++i)
+		a.mutate(0.9, 0.05, 0.0);
+	//Save DOT
+	a.saveDOT("aNetwork.dot");
+	
+	
+	//Generate a random network
+	EvolutionGNN<float> b;
+	//Initialize with 5 inputs and 5 outputs
+	b.initialize(5, 5);
+	//Add 15 hidden nodes
+	b.addNodes(15);
+	//Mutate for 10 times
+	for(int i = 0; i < 10; ++i)
+		b.mutate(0.9, 0.05, 0.0);
+	//Save DOT
+	b.saveDOT("bNetwork.dot");
+	
+	//Create a network that inheritant from a and b
+	EvolutionGNN<float> c;
+	//Inherit from a and b
+	c.inherit(a, b, 0.9, 0.9);
+	//Save DOT
+	c.saveDOT("cNetwork.dot");
+	
 	return 0;
 }

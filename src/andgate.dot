@@ -1,0 +1,18 @@
+digraph Evolutional_Graph_Neural_Network {
+	rankdir=TB;
+	node [shape = circle];
+	subgraph cluster_0 {
+		label="Input Nodes";
+		0; 		1; 
+	}
+
+	subgraph cluster_1 {
+		label="Output Nodes";
+		2; 
+	}
+
+	0 -> 2[label=40.000000, weight=40.000000, color=red];
+	1 -> 2[label=40.000000, weight=40.000000, color=red];
+	3 -> 3[label=20.000000, weight=20.000000, color=red];
+	3 -> 2[label=-60.000000, weight=-60.000000, color=blue];
+}
