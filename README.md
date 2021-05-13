@@ -9,6 +9,9 @@ T_EvolutionGraphNN.h is a C++ library which simulates graph neural networks and 
 - [Examples](#Examples)
     - [Basic Usages](#Basic-Usages)
     - [Logic Gates](#Logic-Gates)
+        - [NOT Gate](#NOT-Gate)
+        - [AND Gate](#AND-Gate)
+        - [OR Gate](#OR-Gate)
 
 ***
 
@@ -43,6 +46,16 @@ To compile the program using **g++**, we need to include the **-lpthread** optio
 ```bash
 g++ your_cpp_file.cpp -o your_desired_executable_name -lpthread
 ```
+
+The test code of EvolutionGraphNN is include in the [src](./src) folder.
+
+To test the test code, follow these steps:
+
+1. Open the terminal in the **Evolutional-Graph-Neural-Network** folder.
+1. Navigate to **src** folder in the terminal by typing `cd src/` and hit **Enter**.
+1. Compile the executable by typing `make` and hit **Enter** in the terminal.
+1. Run the compiled executable and generate .svg of test models by typing `make test` and hit **Enter** in the terminal.
+
 
 ### Logic Gates
 
