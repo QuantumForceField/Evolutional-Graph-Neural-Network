@@ -4,11 +4,11 @@ T_EvolutionGraphNN.h is a C++ library which simulates graph neural networks and 
 ***
 
 ## Table of Content
-- [Introductions]{#Introductions}
-- [Requirements]{#Requirements}
-- [Examples]{#Examples}
-    - [Basic Usages]{#Basic_Usages}
-    - [Logic Gates]{#Logic_Gates}
+- [Introductions]{#introductions}
+- [Requirements]{#requirements}
+- [Examples]{#examples}
+    - [Basic Usages]{#basic_usages}
+    - [Logic Gates]{#logic_gates}
 
 ***
 
