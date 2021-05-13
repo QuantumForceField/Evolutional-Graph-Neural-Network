@@ -36,10 +36,12 @@ int main(){
 	test(notGate, "NOT GATE with input [ 1], expected output [-1]");
 	
 	cout << endl;
+	//Save NOT gate as dot
+	notGate.saveDOT("notgate.dot");
 	
 	
 	
-	//Testing AND operation
+	//Testing OR operation
 	EvolutionGNN<float> orGate(2, 1);
 	//Add nodes
 	orGate.addNodes(3);
@@ -77,6 +79,8 @@ int main(){
 	test(orGate, "OR GATE with input [1,   1], expected output [ 1]");
 	
 	cout << endl;
+	//Save OR gate as dot
+	orGate.saveDOT("orgate.dot");
 	
 	
 	
@@ -114,6 +118,8 @@ int main(){
 	test(andGate, "AND GATE with input [1,   1], expected output [ 1]");
 	
 	cout << endl;
+	//Save AND gate as dot
+	andGate.saveDOT("andgate.dot");
 	
 	
 	
