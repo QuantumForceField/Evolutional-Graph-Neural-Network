@@ -4,11 +4,11 @@ T_EvolutionGraphNN.h is a C++ library which simulates graph neural networks and 
 ***
 
 ## Table of Content
-- [Introductions]{#introductions}
-- [Requirements]{#requirements}
-- [Examples]{#examples}
-    - [Basic Usages]{#basic_usages}
-    - [Logic Gates]{#logic_gates}
+- [Introductions](#Introductions)
+- [Requirements](#Requirements)
+- [Examples](#Examples)
+    - [Basic Usages](#Basic-Usages)
+    - [Logic Gates](#Logic-Gates)
 
 ***
 
@@ -50,7 +50,7 @@ In this section, I'll demonstrate that the graph neural network is able to act a
 
 Since the activation of the neural network is ***tanh***, we can expect that the output of each neuron will be bounded in **(-1.0, 1.0)**. To take advantage of this feature, we will define **True** as **1**, and **False** as **-1** for the neural network.
 
-#### NOT Gate
+#### **NOT Gate**
 To create a **Not Gate**, we can simply flip the input of a neuron. So the architecture will be like this:
 
 ![Architecture for Not Gate](./img/notgate.svg)
@@ -73,7 +73,7 @@ notGate.addConnection(0, 1, -20.0);
 And that completes the building of **Not Gate** with EvolutionGNN.
 
 
-#### AND Gate
+#### **AND Gate**
 To create a **And Gate**, the architecture is a bit more complicated than **Not Gate**. Which looks like this:
 
 ![Architecture for And Gate](./img/andgate.svg)
@@ -107,7 +107,7 @@ notGate.addConnection(3, 2, -60.0);
 And that completes the building of **And Gate** with EvolutionGNN.
 
 
-#### OR Gate
+#### **OR Gate**
 
 To create a **Or Gate**, the architecture is a bit more complicate than **And Gate**:
 
