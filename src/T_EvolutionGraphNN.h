@@ -117,6 +117,9 @@ public:
 	//Used when writing to file
 	void writeToFile(fstream& out);
 
+	//Get the DOT presentation for Graphviz
+	string getDOT();
+
 	//For << overload
 	friend ostream;
 };
@@ -307,8 +310,8 @@ public:
 	void addConnection(int node1, int node2, T weight = T(1), T ABuffer = T(0), T BBuffer = T(0), bool useABuffer = false);
 
 	//Add connection between nodes with random input
-	// node1 -------> node2
-	//weight following 
+	// node1 -------> node2 (node1 should not be input nodes)
+	// weight following normal distribution
 	void addRandomConnection(int count = 1, unsigned int randomState = rand());
 
 	//Remove a connection given by the index
@@ -340,6 +343,11 @@ public:
 	// repeatRate to mutate again (follows Geometric distributions)
 	void mutate(double newConRate = 0.5, double deleteConRate = 0.5, double newNodeRate = 0.0001, double repeatRate = 0.5);
 
+	//Get the DOT representation for Graphviz
+	string getDOT();
+
+	//Save the DOT representation for Graphviz
+	void saveDOT(string filename = "model.dot");
 
 	//Testing function
 	void test(bool mt = false) {
@@ -435,7 +443,6 @@ public:
 		cout << endl << endl << endl;;
 	}
 
-
 	friend ostream;
 };
 
@@ -455,6 +462,58 @@ ostream& operator<<(ostream& o, EvolutionGNN<T>& egnn) {
 
 /***********************************************/
 // Function bodies
+
+template <class T>
+void EvolutionGNN<T>::saveDOT(string filename) {
+	fstream file;
+	file.open(filename, ios::out);
+	file << getDOT();
+	file.close();
+}
+
+template <class T>
+string EvolutionGNN<T>::getDOT() {
+	string dot;
+
+	//Syntex
+	dot += "digraph Evolutional_Graph_Neural_Network {\n";
+	dot += "\trankdir=TB;\n";
+	dot += "\tnode [shape = circle];\n";
+
+	//All input nodes
+	dot += "\tsubgraph cluster_0 {\n";
+	dot += "\t\tlabel=\"Input Nodes\";\n";
+	for (int i = 0; i < inputNodes.size(); ++i)
+		dot += "\t\t" + to_string(i) + "; ";
+	dot += "\n\t}\n";
+
+	//All output nodes
+	dot += '\n';
+	dot += "\tsubgraph cluster_1 {\n";
+	dot += "\t\tlabel=\"Output Nodes\";\n";
+	int s = inputNodes.size();
+	for (int i = 0; i < outputNodes.size(); ++i)
+		dot += "\t\t" + to_string(i + s) + "; ";
+	dot += "\n\t}\n\n";
+
+	////Uncomment to show disconnected nodes
+	////All hidden nodes
+	//dot += '\t';
+	//s = inputNodes.size() + outputNodes.size();
+	//for(int i = 0; i < graphNodes.size(); ++i)
+	//	dot += to_string(i + s) + "; ";
+	//dot += "\n\n";
+
+
+	//All connections (edges)
+	for (auto i : con)
+		dot += '\t' + i->getDOT() + '\n';
+
+	//Syntex
+	dot += "}\n";
+
+	return dot;
+}
 
 template <class T>
 void EvolutionGNN<T>::mutate(double newConRate, double deleteConRate, double newNodeRate, double repeatRate) {
@@ -703,7 +762,7 @@ void EvolutionGNN<T>::addRandomConnection(int count, unsigned int randomState) {
 	default_random_engine generator(randomState);
 	normal_distribution<double> distribution(1.0, 1.0);
 	for (int i = 0; i < count; ++i)
-		addConnection(rand() % nodeCount, rand() % nodeCount, rand() % 20000 / 1000.0 - 10.0);
+		addConnection(rand() % nodeCount, rand() % (nodeCount - inputNodes.size()) + inputNodes.size(), rand() % 20000 / 1000.0 - 10.0);
 }
 
 template <class T>
@@ -1116,6 +1175,12 @@ void GraphNode<T>::setId(int id) {
 template <class T>
 GraphNode<T>::GraphNode(int id) {
 	this->id = id;
+}
+
+template <class T>
+string Connection<T>::getDOT() {
+	string dot = to_string(inNodeId) + " -> " + to_string(outNodeId) + "[label=" + to_string(weight) + ", weight=" + to_string(weight) + ", color=" + (weight > 0.0 ? "red" : "blue") + "];";
+	return dot;
 }
 
 template <class T>
