@@ -67,7 +67,7 @@ Since the activation of the neural network is ***tanh***, we can expect that the
 To create a **Not Gate**, we can simply flip the input of a neuron. So the architecture will be like this:
 
 <p align="center"> 
-<img src="./img/notgate.svg" alt="Architecture for Not Gate">
+<img src="./img/notgate.svg" alt="Architecture for Not Gate" style="border-radius: 10px;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
 </p>
 
 To create such neural network, we should define the network to have **1 input node** and **1 output node**:
@@ -144,15 +144,15 @@ These proved that our **Not Gate** works!
 To create an **And Gate**, the architecture is a bit more complicated than **Not Gate**. Which looks like this:
 
 <p align="center"> 
-<img src="./img/andgate.svg" alt="Architecture for And Gate">
+<img src="./img/andgate.svg" alt="Architecture for And Gate" style="border-radius: 10px;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
 </p>
 
-One thing to note is that **node #3** is not a normal node. It acts as a *bias*, and constantly output 1 so that when it multiple by -60.0 it constantly output -60.0. The reason for this is that we want **Not Gate** only turns on (output 1) when both inputs are **True** (1) but not when only one input is **True**.  
+One thing to note is that **node #3** is not a normal node. It acts as a *bias*, and constantly output 1 so that when its multiplied by -60.0 it constantly output -60.0. The reason for this is that we want **And Gate** only turns on (outputs 1) when both inputs are **True** (1) but not when only one of the inputs is **True**.  
 
 To create such neural network, we should define the network to have **2 input nodes** and **1 output node**:
 
 ```cpp
-//Create a Not Gate network
+//Create a And Gate network
 EvolutionGNN<float> andGate;
 
 //Set the network to have 2 input node and 1 output node
@@ -162,26 +162,106 @@ andGate.initialize(2, 1);
 //We first create connections from input nodes to output node
 //Since we have two input nodes, their node id will be 0 and 1
 //Since we have 1 output node, it's node id will be (#input_nodes + 0), which is 2
-notGate.addConnection(0, 2, 40.0);
-notGate.addConnection(1, 2, 40.0);
+andGate.addConnection(0, 2, 40.0);
+andGate.addConnection(1, 2, 40.0);
 
 //We then create a loop back connect for node 3 and make sure it initials 
 //with both buffers set to 1.0 so that the node will always output 1.0
-notGate.addConnection(3, 3, 20.0, 1.0, 1.0);
+andGate.addConnection(3, 3, 20.0, 1.0, 1.0);
 
 //Finally, we add the connection from node 3 to output node
-notGate.addConnection(3, 2, -60.0);
+andGate.addConnection(3, 2, -60.0);
 ```
 
 And that completes the building of **And Gate** with EvolutionGNN.
 
+To test if the **And Gate** runs as expected, we make 3 test cases.
+
+The first one with both inputs set to -1.0 (false):
+```cpp
+//Set input indexed at 0 to -1.0
+andGate.setInput(0, -1.0);
+//Set input indexed at 1 to -1.0
+andGate.setInput(1, -1.0);
+```
+We then run the andGate for 10 times:
+```cpp
+for(int i = 0; i < 10; ++i) {
+    //Run the simulation for 1 time frame
+    andGate.run();
+
+    //Flip internal buffer
+    andGate.flipBuffer();
+
+    //Show the output at index -
+    std::cout << andGate.getOutput(0) << ' ';
+}
+std::cout << std::endl;
+```
+The outcome will looks like this
+```
+0 -1 -1 -1 -1 -1 -1 -1 -1 -1
+```
+
+Another test case is with inputs set to -1.0 (false) and 1.0 (true) respectively:
+```cpp
+//Set input indexed at 0 to -1.0
+andGate.setInput(0, -1.0);
+//Set input indexed at 1 to 1.0
+andGate.setInput(1, 1.0);
+```
+We again run the notGate for 10 times:
+```cpp
+for(int i = 0; i < 10; ++i) {
+    //Run the simulation for 1 time frame
+    andGate.run();
+
+    //Flip internal buffer
+    andGate.flipBuffer();
+
+    //Show the output at index -
+    std::cout << andGate.getOutput(0) << ' ';
+}
+std::cout << std::endl;
+```
+The outcome will looks like this
+```
+0 -1 -1 -1 -1 -1 -1 -1 -1 -1
+```
+
+In the last test case, we set both inputs to 1 (true):
+```cpp
+//Set input indexed at 0 to 1.0
+andGate.setInput(0, 1.0);
+//Set input indexed at 1 to 1.0
+andGate.setInput(1, 1.0);
+```
+We again run the notGate for 10 times:
+```cpp
+for(int i = 0; i < 10; ++i) {
+    //Run the simulation for 1 time frame
+    andGate.run();
+
+    //Flip internal buffer
+    andGate.flipBuffer();
+
+    //Show the output at index -
+    std::cout << andGate.getOutput(0) << ' ';
+}
+std::cout << std::endl;
+```
+The outcome will looks like this
+```
+0 1 1 1 1 1 1 1 1 1
+```
+These proved that our **And Gate** works!
 
 #### **OR Gate**
 
 To create an **Or Gate**, the architecture is a bit more complicate than **And Gate**:
 
 <p align="center"> 
-<img src="./img/orgate.svg" alt="Architecture for Or Gate">
+<img src="./img/orgate.svg" alt="Architecture for Or Gate" style="border-radius: 10px;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
 </p>
 
 Again, **node #3** is not a normal node. It acts as a *bias*, and constantly output 1. 
