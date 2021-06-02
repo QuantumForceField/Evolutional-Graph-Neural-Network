@@ -1,5 +1,5 @@
 # Evolutional-Graph-Neural-Network
-T_EvolutionGraphNN.h is a C++ library which simulates graph neural networks and their evolution process.
+T_EvolutionGraphNN.h is a C++ library which simulates directed graph neural networks and their evolution processes.
 
 ***
 
@@ -12,6 +12,8 @@ T_EvolutionGraphNN.h is a C++ library which simulates graph neural networks and 
         - [NOT Gate](#NOT-Gate)
         - [AND Gate](#AND-Gate)
         - [OR Gate](#OR-Gate)
+    - [Oscillator](#Oscillator)
+    - [Memory Cell](#Memory-Cell)
 
 ***
 
@@ -62,6 +64,8 @@ To compile and run the test code, follow these steps:
 In this section, I'll demonstrate that the graph neural network is able to act as logic gates.
 
 Since the activation of the neural network is ***tanh***, we can expect that the output of each neuron will be bounded in **(-1.0, 1.0)**. To take advantage of this feature, we will define **True** as **1**, and **False** as **-1** for the neural network.
+
+***
 
 #### **NOT Gate**
 To create a **Not Gate**, we can simply flip the input of a neuron. So the architecture will be like this:
@@ -139,6 +143,7 @@ The outcome will looks like this
 ```
 These proved that our **Not Gate** works!
 
+***
 
 #### **AND Gate**
 To create an **And Gate**, the architecture is a bit more complicated than **Not Gate**. Which looks like this:
@@ -256,6 +261,8 @@ The outcome will looks like this
 ```
 These proved that our **And Gate** works!
 
+***
+
 #### **OR Gate**
 
 To create an **Or Gate**, the architecture is a bit more complicate than **And Gate**:
@@ -370,7 +377,7 @@ for(int i = 0; i < 10; ++i) {
     //Flip internal buffer
     orGate.flipBuffer();
 
-    //Show the output at index -
+    //Show the output at index 0
     std::cout << orGate.getOutput(0) << ' ';
 }
 std::cout << std::endl;
@@ -380,3 +387,227 @@ The outcome will looks like this
 0 -1 1 1 1 1 1 1 1 1
 ```
 These proved that our **Or Gate** works!
+
+***
+
+### Oscillator
+Since T_EvolutionGraphNN allows cyclic graphs to exist, creating oscillator can be extremely easy to achieve.
+
+Here is a simple **oscillator** network:
+<p align="center">
+<img alt="Oscillator design" src="./img/oscillator.svg">
+</p>
+
+To create such oscillator, we should first create an EvolutionGNN with 1 input and 1 output:
+```cpp
+//Create an oscillator
+EvolutionGNN<float> oscillator;
+
+//Initialize with 1 input and 1 output
+oscillator.initialize(1, 1);
+```
+
+Add an additional node to the network:
+```cpp
+//Add a node
+oscillator.addNodes();
+```
+
+Connect nodes as shown in the figure:
+```cpp
+//Input node to node #2
+oscillator.addConnection(0, 2, 20.0);
+
+//Node #2 to itself
+oscillator.addConnection(2, 2, -40.0);
+
+//Node #2 to output
+oscillator.addConnection(2, 1, 20.0);
+```
+
+To test the above oscillator, we should first kick-start the oscillation by giving some input to the system.
+```cpp
+//Set input to 1.0 for 1 time step
+oscillator.setInput(0, 1.0);
+oscillator.run();
+oscillator.flipBuffer();
+
+//Set the input back to 0.0 for the remaining time steps
+oscillator.setInput(0, 0.0);
+oscillator.run();
+oscillator.flipBuffer();
+```
+
+We then run the oscillator for 10 time steps:
+```cpp
+for(int i = 0; i < 10; ++i) {
+    //Run for 1 time step
+    oscillator.run();
+
+    //Flip internal buffer
+    oscillator.flipBuffer();
+
+    //Show current output at index 0
+    std::cout << oscillator.getOutput(0) << ' ';
+}
+std::cout << std::endl;
+```
+
+And the result looks like this:
+```
+1 -1 1 -1 1 -1 1 -1 1 -1
+```
+
+
+In fact, we can create many other types of oscillators as well, here is an example of oscillator that oscillates slower than the previous one:
+
+<p align="center">
+<img alt="Slower Oscillator design" src="./img/slowOscillator.svg">
+</p>
+
+Codes to create the oscillator above:
+```cpp
+//Create an oscillator
+EvolutionGNN<float> oscillator;
+
+//Initialize with 1 input and 1 output
+oscillator.initialize(1, 1);
+
+//Add nodes
+oscillator.addNodes(5);
+
+//Add connections
+oscillator.addConnection(0, 2, 20.0);
+oscillator.addConnection(2, 2, 20.0);
+oscillator.addConnection(2, 3, 20.0);
+oscillator.addConnection(3, 4, 20.0);
+oscillator.addConnection(4, 5, 20.0);
+oscillator.addConnection(5, 6, 20.0);
+oscillator.addConnection(6, 2, -40.0);
+oscillator.addConnection(2, 1, 20.0);
+
+//Set input to 1.0 for 1 time step
+oscillator.setInput(0, 1.0);
+oscillator.run();
+oscillator.flipBuffer();
+
+//Set the input back to 0.0 for the remaining time steps
+oscillator.setInput(0, 0.0);
+oscillator.run();
+oscillator.flipBuffer();
+
+for (int i = 0; i < 20; ++i) {
+	//Run for 1 time step
+	oscillator.run();
+
+	//Flip internal buffer
+	oscillator.flipBuffer();
+
+	//Show current output at index 0
+	std::cout << oscillator.getOutput(0) << ' ';
+}
+std::cout << std::endl;
+```
+With output:
+```
+1 1 1 1 1 -1 -1 -1 -1 -1 1 1 1 1 1 -1 -1 -1 -1 -1
+```
+
+***
+
+### Memory Cell
+Been able to remember things are essential for intelligent systems to develop higher order thinking parts. T_EvolutionGraphNN happens to support it.
+
+Similar to oscillators, memory cells are also created with cyclic graphs, and they can be extremely simple in design too.
+
+Here is an example of an **Erasable Memory Cell**:
+
+<p align="center">
+<img alt="Memory Cell design" src="./img/memoryCell.svg">
+</p>
+
+The memory cell is constructed with the following code:
+```cpp
+//Create an memory cell
+EvolutionGNN<float> memCell;
+
+//Initialize with 1 input and 1 output
+memCell.initialize(1, 1);
+
+//Add 1 node
+memCell.addNodes();
+
+//Link input to node# 2
+memCell.addConnection(0, 2, 40.0);
+
+//Link node# 2 to itself
+memCell.addConnection(2, 2, 20.0);
+
+//Link node# 2 to output
+memCell.addConnection(2, 1, 20.0);
+```
+
+To write 1.0 into the memory cell:
+```cpp
+//Write 1.0 into the input
+memCell.setInput(0, 1.0);
+memCell.run();
+memCell.flipBuffer();
+//Reset input to 0.0
+memCell.setInput(0, 0.0);
+memCell.run();
+memCell.flipBuffer(); 
+```
+
+Watch the output of the memory cell for 10 time steps:
+```cpp
+for (int i = 0; i < 10; ++i) {
+    //Run for 1 time step
+    memCell.run();
+
+    //Flip internal buffer
+    memCell.flipBuffer();
+
+    //Show current output
+    std::cout << memCell.getOutput(0) << ' ';
+}
+std::cout << std::endl;
+```
+
+Which shows:
+```
+1 1 1 1 1 1 1 1 1 1
+```
+
+Next we change the input to -1.0 for 1 time step
+```cpp
+//Write -1.0 into the input
+memCell.setInput(0, -1.0);
+memCell.run();
+memCell.flipBuffer();
+//Reset input to 0.0
+memCell.setInput(0, 0.0);
+memCell.run();
+memCell.flipBuffer(); 
+```
+
+Watch the output of the memory cell for the next 10 time steps:
+```cpp
+for (int i = 0; i < 10; ++i) {
+    //Run for 1 time step
+    memCell.run();
+
+    //Flip internal buffer
+    memCell.flipBuffer();
+
+    //Show current output
+    std::cout << memCell.getOutput(0) << ' ';
+}
+std::cout << std::endl;
+```
+Which shows:
+```
+-1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+```
+
+These showed that the memory cell is able to remember previous input, and the memory can be erased when new input is given.
