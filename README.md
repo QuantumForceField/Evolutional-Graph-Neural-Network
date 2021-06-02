@@ -67,7 +67,7 @@ Since the activation of the neural network is ***tanh***, we can expect that the
 To create a **Not Gate**, we can simply flip the input of a neuron. So the architecture will be like this:
 
 <p align="center"> 
-<img src="./img/notgate.svg" alt="Architecture for Not Gate" style="border-radius: 10px;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+<img src="./img/notgate.svg" alt="Architecture for Not Gate">
 </p>
 
 To create such neural network, we should define the network to have **1 input node** and **1 output node**:
@@ -144,7 +144,7 @@ These proved that our **Not Gate** works!
 To create an **And Gate**, the architecture is a bit more complicated than **Not Gate**. Which looks like this:
 
 <p align="center"> 
-<img src="./img/andgate.svg" alt="Architecture for And Gate" style="border-radius: 10px;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+<img src="./img/andgate.svg" alt="Architecture for And Gate">
 </p>
 
 One thing to note is that **node #3** is not a normal node. It acts as a *bias*, and constantly output 1 so that when its multiplied by -60.0 it constantly output -60.0. The reason for this is that we want **And Gate** only turns on (outputs 1) when both inputs are **True** (1) but not when only one of the inputs is **True**.  
@@ -193,7 +193,7 @@ for(int i = 0; i < 10; ++i) {
     //Flip internal buffer
     andGate.flipBuffer();
 
-    //Show the output at index -
+    //Show the output at index 0
     std::cout << andGate.getOutput(0) << ' ';
 }
 std::cout << std::endl;
@@ -219,7 +219,7 @@ for(int i = 0; i < 10; ++i) {
     //Flip internal buffer
     andGate.flipBuffer();
 
-    //Show the output at index -
+    //Show the output at index 0
     std::cout << andGate.getOutput(0) << ' ';
 }
 std::cout << std::endl;
@@ -245,7 +245,7 @@ for(int i = 0; i < 10; ++i) {
     //Flip internal buffer
     andGate.flipBuffer();
 
-    //Show the output at index -
+    //Show the output at index 0
     std::cout << andGate.getOutput(0) << ' ';
 }
 std::cout << std::endl;
@@ -261,7 +261,7 @@ These proved that our **And Gate** works!
 To create an **Or Gate**, the architecture is a bit more complicate than **And Gate**:
 
 <p align="center"> 
-<img src="./img/orgate.svg" alt="Architecture for Or Gate" style="border-radius: 10px;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
+<img src="./img/orgate.svg" alt="Architecture for Or Gate">
 </p>
 
 Again, **node #3** is not a normal node. It acts as a *bias*, and constantly output 1. 
@@ -299,3 +299,84 @@ orGate.addConnection(5, 2, 40.0);
 ```
 
 And that completes the building of **Or Gate** with EvolutionGNN.
+
+To test if the **Or Gate** runs as expected, we make 3 test cases.
+
+The first one with both inputs set to -1.0 (false):
+```cpp
+//Set input indexed at 0 to -1.0
+orGate.setInput(0, -1.0);
+//Set input indexed at 1 to -1.0
+orGate.setInput(1, -1.0);
+```
+We then run the andGate for 10 times:
+```cpp
+for(int i = 0; i < 10; ++i) {
+    //Run the simulation for 1 time frame
+    orGate.run();
+
+    //Flip internal buffer
+    orGate.flipBuffer();
+
+    //Show the output at index 0
+    std::cout << orGate.getOutput(0) << ' ';
+}
+std::cout << std::endl;
+```
+The outcome will looks like this
+```
+0 -1 -1 -1 -1 -1 -1 -1 -1 -1
+```
+
+Another test case is with inputs set to -1.0 (false) and 1.0 (true) respectively:
+```cpp
+//Set input indexed at 0 to -1.0
+orGate.setInput(0, -1.0);
+//Set input indexed at 1 to 1.0
+orGate.setInput(1, 1.0);
+```
+We again run the notGate for 10 times:
+```cpp
+for(int i = 0; i < 10; ++i) {
+    //Run the simulation for 1 time frame
+    orGate.run();
+
+    //Flip internal buffer
+    orGate.flipBuffer();
+
+    //Show the output at index -
+    std::cout << orGate.getOutput(0) << ' ';
+}
+std::cout << std::endl;
+```
+The outcome will looks like this
+```
+0 -1 1 1 1 1 1 1 1 1
+```
+
+In the last test case, we set both inputs to 1 (true):
+```cpp
+//Set input indexed at 0 to 1.0
+orGate.setInput(0, 1.0);
+//Set input indexed at 1 to 1.0
+orGate.setInput(1, 1.0);
+```
+We again run the notGate for 10 times:
+```cpp
+for(int i = 0; i < 10; ++i) {
+    //Run the simulation for 1 time frame
+    orGate.run();
+
+    //Flip internal buffer
+    orGate.flipBuffer();
+
+    //Show the output at index -
+    std::cout << orGate.getOutput(0) << ' ';
+}
+std::cout << std::endl;
+```
+The outcome will looks like this
+```
+0 -1 1 1 1 1 1 1 1 1
+```
+These proved that our **Or Gate** works!
