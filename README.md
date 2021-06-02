@@ -88,6 +88,56 @@ notGate.addConnection(0, 1, -20.0);
 And that completes the building of **Not Gate** with EvolutionGNN.
 
 
+To test if the **Not Gate** runs as expected, we make 2 test cases.
+
+The first one with input set to -1.0 (false):
+```cpp
+//Set input indexed at 0 to -1.0
+notGate.setInput(0, -1.0);
+```
+We then run the notGate for 10 times:
+```cpp
+for(int i = 0; i < 10; ++i) {
+    //Run the simulation for 1 time frame
+    notGate.run();
+
+    //Flip internal buffer
+    notGate.flipBuffer();
+
+    //Show the output at index -
+    cout << notGate.getOutput(0) << ' ';
+}
+```
+The outcome will looks like this
+```
+0 1 1 1 1 1 1 1 1 1
+```
+
+Another test case is with input set to 1.0 (true):
+```cpp
+//Set input indexed at 0 to 1.0
+notGate.setInput(0, 1.0);
+```
+We again run the notGate for 10 times:
+```cpp
+for(int i = 0; i < 10; ++i) {
+    //Run the simulation for 1 time frame
+    notGate.run();
+
+    //Flip internal buffer
+    notGate.flipBuffer();
+
+    //Show the output at index 0
+    cout << notGate.getOutput(0) << ' ';
+}
+```
+The outcome will looks like this
+```
+0 -1 -1 -1 -1 -1 -1 -1 -1 -1
+```
+These mean out **Not Gate** works!
+
+
 #### **AND Gate**
 To create an **And Gate**, the architecture is a bit more complicated than **Not Gate**. Which looks like this:
 
