@@ -105,8 +105,9 @@ for(int i = 0; i < 10; ++i) {
     notGate.flipBuffer();
 
     //Show the output at index -
-    cout << notGate.getOutput(0) << ' ';
+    std::cout << notGate.getOutput(0) << ' ';
 }
+std::cout << std::endl;
 ```
 The outcome will looks like this
 ```
@@ -128,8 +129,9 @@ for(int i = 0; i < 10; ++i) {
     notGate.flipBuffer();
 
     //Show the output at index 0
-    cout << notGate.getOutput(0) << ' ';
+    std::cout << notGate.getOutput(0) << ' ';
 }
+std::cout << std::endl;
 ```
 The outcome will looks like this
 ```
