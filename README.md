@@ -137,7 +137,7 @@ The outcome will looks like this
 ```
 0 -1 -1 -1 -1 -1 -1 -1 -1 -1
 ```
-These mean out **Not Gate** works!
+These proved that our **Not Gate** works!
 
 
 #### **AND Gate**
