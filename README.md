@@ -5,6 +5,10 @@ T_EvolutionGraphNN.h is a C++ library which simulates directed graph neural netw
 
 ## Table of Content
 - [Introductions](#Introductions)
+    - [Base Classes](#Base-Classes)
+        - [GraphNode](#GraphNode)
+        - [Connection](#Connection)
+    - [EvolutionGNN](#EvolutionGNN)
 - [Requirements](#Requirements)
 - [Examples](#Examples)
     - [Basic Usages](#Basic-Usages)
@@ -18,10 +22,45 @@ T_EvolutionGraphNN.h is a C++ library which simulates directed graph neural netw
 ***
 
 ## Introductions
-This library is created to simulate graph neural networks in a time-step manner. The library allowed users to create, configure, run, save, load and visualize graph neural networks, as well as simulate evolution process of the network by inheritance, and mutations.
+This library is created to simulate graph neural networks in a time-step manner. The library allowed users to create, configure, run, save, load and visualize graph neural networks, as well as simulates evolution processes of the network by inheritance, and mutations.
 
 As this library simulates graph neural networks in a time-based manner, neural networks with cycles are allowed to exist.
 
+### Base Classes
+
+In the library, neurons and connections between neurons are implemented as **GraphNode** and **Connection** respectively.
+
+#### GraphNode
+**GraphNode** represents an abstract concept of neurons in the graph neural network. It manages a list of in-coming connections and out-going connections.
+
+The **GraphNode** is like any common neurons in artificial neural networks, summing all inputs and pass it through an activation function to produce an output.
+
+<p align="center">
+<img alt="GraphNode representation" src="./img/graphNode.svg">
+</p>
+
+Currently, the activation function for every neurons in T_EvolutionGraphNN is *tanh*.
+By calling the function `run()`, **GraphNode** performs above calculations, and stores the output in all of it's out-going connections.
+
+#### Connection
+**Connection** represents an abstract concept of connections between neurons, or *"Axons"* in real neurons. In T_EvolutionGraphNN, each **Conncetion** only connects between 2 neurons, **Connection** connecting back to the same neuron is allowed.
+
+Similar to popular neural network concepts, a weight is added to each connection. Differs from common neural networks, the calculation result of neuron is actually stored in **Connection** in T_EvolutionGraphNN.
+
+To allow parallel executions and to avoid problems created by cyclic graph, each **Connection** internally maintains 2 buffers to store calculated result from neuron. At any time step, write operation will be performed on one of the buffer, and any read operation will only be performed on another one. It is after `flipBuffer()` been called that both buffers will swap their roles.
+
+Calling `get()` in **Connection** does not directly returns a value stored in the buffer, but returns *weight \* value* instead.
+
+### EvolutionGNN
+**EvolutionGNN** is the class that maintains all **GraphNode** and **Connection** in a single graph neural network. For general users, knowledge about how to use this class is very enough.
+
+To initialize the **EvolutionGNN**, one should know the total amount of inputs and outputs, which cannot be changed unless initialized again. We can initialize **EvolutionGNN** using the constructor, like `EvolutionGNN<float> egnn(9, 3);` creates an **EvolutionGNN** instance with 9 inputs and 3 outputs. We can also initialize the **EvolutionGNN** later by using the function `initialize()`, like
+```cpp
+EvolutionGNN<float> egnn;
+
+//Initialize in a later stage
+egnn.initialize(9, 3);
+```
 
 ***
 
@@ -38,7 +77,6 @@ As this library simulates graph neural networks in a time-based manner, neural n
 ***
 
 ## Examples
-(To be continued)
 ### Basic Usages
 To use the EvolutionGNN library, we just need to include the header file in our code:
 ```cpp
