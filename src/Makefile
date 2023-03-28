@@ -1,5 +1,5 @@
 make: clean test.cpp T_EvolutionGraphNN.h
-	g++ test.cpp -o test -lpthread
+	g++ test.cpp -o test -lpthread -std=c++20
 
 clean:
 	rm -f test
